@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<DialogPane fx:id="dialogPane" xmlns:fx="http://javafx.com/fxml" fx:controller="sample.FileWindowController" prefHeight="200.0" prefWidth="350.0">
+   <headerText>
+      Load .csv file:
+   </headerText>
+   <content>
+      <GridPane vgap="10" hgap="10">
+         <Label text="Path to the file:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+         <Button text="..." GridPane.rowIndex="1" GridPane.columnIndex="1" onAction="#setPath"/>
+         <TextField fx:id="chosenFile" prefWidth="100.0" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+         <Label text="Enter column types:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+         <TextField fx:id="columnsTypes" prefWidth="100.0" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+         <Label text="Enter column names:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+         <TextField fx:id="columnsNames" prefWidth="100.0" GridPane.rowIndex="5" GridPane.columnIndex="0" onAction="#handleKeyReleased"/>
+         <CheckBox fx:id="isFirstLineWithNames" text="First line contains column names" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#handleKeyReleased"/>
+      </GridPane>
+   </content>
+</DialogPane>
