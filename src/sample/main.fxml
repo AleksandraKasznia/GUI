@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.*?>
 
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
-<BorderPane fx:id="mainBorderPane"  xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane fx:id="mainBorderPane" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
     <top>
         <MenuBar>
             <Menu text="File">
-                <MenuItem text="Load" onAction="#showLoadDialog" />
+                <MenuItem onAction="#showLoadDialog" text="Load" />
             </Menu>
-            <Menu text="GroupBy">
-                <MenuItem text="Change groupBy attribute"/>
-                <SeparatorMenuItem />
-                <MenuItem text="Max" />
-                <MenuItem text="Min" />
-                <MenuItem text="Mean" />
-                <MenuItem text="Std" />
-                <MenuItem text="Var" />
-                <MenuItem text="Sum" />
-                <MenuItem text="Median" />
+            <Menu text="Print">
+                <MenuItem text="Max" onAction="#max"/>
+                <MenuItem text="Min" onAction="#min"/>
+                <MenuItem text="Mean" onAction="#mean"/>
+                <MenuItem text="Std" onAction="#std"/>
+                <MenuItem text="Var" onAction="#var"/>
+                <MenuItem text="Sum" onAction="#sum"/>
+                <MenuItem text="Median" onAction="#median"/>
+                <MenuItem text="Data Frame" onAction="#data"/>
             </Menu>
             <Menu text="Charts">
 
             </Menu>
         </MenuBar>
     </top>
-    <center>
-        <TextArea fx:id="textArea" />
-    </center>
     <left>
         <GridPane>
             <rowConstraints>
@@ -40,12 +45,19 @@
                 <ColumnConstraints minWidth="10.0" prefWidth="350.0" />
             </columnConstraints>
 
-            <Label text="Log" GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER" prefWidth="350">
+            <Label alignment="CENTER" prefWidth="350" text="Alerts" GridPane.columnIndex="0" GridPane.rowIndex="0">
 
             </Label>
-            <TextArea fx:id="logArea" GridPane.rowIndex="1" GridPane.columnIndex="0" prefHeight="670"/>
+            <TextArea fx:id="alertsArea" prefHeight="670" GridPane.columnIndex="0" GridPane.rowIndex="1" wrapText="true" />
         </GridPane>
     </left>
+   <center>
+      <ScrollPane fx:id="spane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <content>
+            <Pane fx:id="view" prefHeight="631.0" prefWidth="200.0" />
+        </content>
+      </ScrollPane>
+   </center>
 
 
 </BorderPane>

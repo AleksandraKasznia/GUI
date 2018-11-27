@@ -1,5 +1,6 @@
 package sample;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class SparseDataFrame extends DataFrame {
@@ -8,7 +9,7 @@ public class SparseDataFrame extends DataFrame {
     int sizeOfColumn;
     String toHide;
 
-    public SparseDataFrame(String[] namesOfColumns, ArrayList<Class<? extends Value>> typesOfColumns, String hide ) {
+    public SparseDataFrame(String[] namesOfColumns, ArrayList<Class<? extends Value>> typesOfColumns, String hide ) throws CustomException{
         super(namesOfColumns, typesOfColumns);
         numberOfColumns = namesOfColumns.length;
         names = namesOfColumns;
@@ -40,7 +41,8 @@ public class SparseDataFrame extends DataFrame {
     }
 
 
-    DataFrame toDense()throws CustomException{
+    DataFrame toDense()throws NumberFormatException, CustomException, IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException, InstantiationException{
         DataFrame standardDataFrame = new DataFrame(names, types);
         String[] temp = new String[numberOfColumns];
 

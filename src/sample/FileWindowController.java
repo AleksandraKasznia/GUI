@@ -44,13 +44,13 @@ public class FileWindowController {
         chosenFile.setText(filePath);
     }
 
-    public FileInformation process()
-    {
+    public FileInformation process() throws CustomException{
         FileInformation fileInformation = new FileInformation();
         fileInformation.filePath = chosenFile.getText();
+        if(fileInformation.filePath==null || fileInformation.filePath.equals("")){
+            throw new CustomException("You need to choose a file");
+        }
         fileInformation.isFirstLineWithNames = isFirstLineWithNames.isSelected();
-        try
-        {
             if(columnsNames.getText() != null)
             {
                 fileInformation.columnsNames = columnsNames.getText().split(",");
@@ -63,23 +63,33 @@ public class FileWindowController {
 
                 for(int i=0; i<types.length ; i++) {
                     types[i] = types[i].trim();
-                    if(types[i].equals("int"))
+                    if(types[i].equals("int")) {
                         fileInformation.columnsTypes.add(IntHolder.class);
-                    if(types[i].equals("double"))
-                        fileInformation.columnsTypes.add(DoubleHolder.class);
-                    if(types[i].equals("date"))
-                        fileInformation.columnsTypes.add(DateTimeHolder.class);
-                    if(types[i].equals("float"))
-                        fileInformation.columnsTypes.add(FloatHolder.class);
-                    if(types[i].equals("string"))
-                        fileInformation.columnsTypes.add(StringHolder.class);
+                    }
+                    else{
+                        if (types[i].equals("double")){
+                                fileInformation.columnsTypes.add(DoubleHolder.class);
+                        }
+                        else{
+                            if (types[i].equals("date")) {
+                                fileInformation.columnsTypes.add(DateTimeHolder.class);
+                            }
+                            else{
+                                if (types[i].equals("float")) {
+                                    fileInformation.columnsTypes.add(FloatHolder.class);
+                                }
+                                else{
+                                    if (types[i].equals("string")) {
+                                        fileInformation.columnsTypes.add(StringHolder.class);
+                                    }
+                                    else throw new CustomException("You misspelled type");
+                                }
+                            }
+                        }
+                    }
                 }
             }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+            else throw new CustomException("You forgot to type the types");
         return fileInformation;
     }
 

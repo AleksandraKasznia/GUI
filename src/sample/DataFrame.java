@@ -12,61 +12,56 @@ public class DataFrame implements Cloneable{
     ArrayList<ArrayList> dataFrame;
     String[] names;
     ArrayList<Class<? extends Value>> types;
+    int numberOfColumns;
 
 
-    public DataFrame(String[] names, ArrayList<Class<? extends Value>> types){
+    public DataFrame(String[] names, ArrayList<Class<? extends Value>> types)throws CustomException{
         dataFrame = new ArrayList<>();
         this.names = names;
         this.types = types;
-        try{
-            initiate(types);
-        }
-        catch(CustomException e){
-            e.printStackTrace();
-        }
-
+        this.numberOfColumns = names.length;
+        initiate(types);
     }
 
     DataFrame(DataFrame df){
         names = df.names;
         types = df.types;
         dataFrame = df.dataFrame;
+        numberOfColumns = names.length;
     }
 
-    DataFrame(String fileName, ArrayList<Class<? extends Value>> types, boolean isHeader){
-        try ( BufferedReader br = Files.newBufferedReader(Paths.get(fileName))){
+    DataFrame(String fileName, ArrayList<Class<? extends Value>> types, boolean isHeader) throws IOException,
+            NumberFormatException, CustomException, IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException, InstantiationException{
+        BufferedReader br = Files.newBufferedReader(Paths.get(fileName));
             dataFrame = new ArrayList<>();
             String line = br.readLine();
             if(line.split(",").length!=types.size()){
-                System.out.print("Amount of given types can't differ from number of columns in file");
+                throw new CustomException("Amount of given types can't differ from number of columns in file");
             }
-            else{
+            else {
                 names = new String[types.size()];
-                if(isHeader && line!=null){
+                if (isHeader && line != null) {
                     names = line.split(",");
                     line = br.readLine();
                 }
                 initiate(types);
                 this.types = types;
 
-                while(line!=null){
+                while (line != null) {
                     String[] attributes = line.split(",");
                     add(attributes);
                     line = br.readLine();
                 }
+                numberOfColumns = names.length;
             }
-        } catch (IOException | NumberFormatException | CustomException e){
-            e.printStackTrace();
-        }
-
-
     }
 
-    int Size(){
+    int size(){
         return dataFrame.get(0).size();
     }
 
-    ArrayList get(String colname)throws CustomException{
+    ArrayList get(String colname) throws CustomException{
         int i;
         for (i=0; i<names.length; i++){
             if (names[i].equals(colname)){
@@ -74,6 +69,10 @@ public class DataFrame implements Cloneable{
             }
         }
         throw new CustomException("There is no such column");
+    }
+
+    Value getRecord(int column, int row){
+        return (Value)dataFrame.get(column).get(row);
     }
 
     DataFrame get(String[] cols, boolean copy) throws CustomException{
@@ -99,7 +98,7 @@ public class DataFrame implements Cloneable{
         return row;
     }
 
-    DataFrame iloc(int i){
+    DataFrame iloc(int i) throws CustomException{
         ArrayList list = new ArrayList();
         for (int k=0; k<dataFrame.size(); k++){
             if(dataFrame.get(k).size()>i){
@@ -112,7 +111,7 @@ public class DataFrame implements Cloneable{
         return new DataFrame(names, list);
     }
 
-    DataFrame iloc(int from, int to){
+    DataFrame iloc(int from, int to) throws CustomException{
         ArrayList list = new ArrayList();
         ArrayList df = new ArrayList();
         for (int i=0; i<dataFrame.size(); i++){
@@ -155,7 +154,8 @@ public class DataFrame implements Cloneable{
                 }
     }
 
-    void add(String [] content) throws NumberFormatException, CustomException{
+    void add(String [] content) throws NumberFormatException, CustomException, IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException, InstantiationException{
         ArrayList <Value> values = new ArrayList<>();
         if(content.length > names.length){
             throw new CustomException("Too many arguments to add");
@@ -163,15 +163,9 @@ public class DataFrame implements Cloneable{
         if(content.length < names.length){
             throw new CustomException("Too few arguments to add");
         }
-        try {
             for (int columnIterator = 0; columnIterator < names.length; columnIterator++) {
                 values.add(Value.builder(types.get(columnIterator)).build(content[columnIterator]));
             }
-        }
-        catch(InstantiationException | IllegalAccessException | CustomException | InvocationTargetException | NoSuchMethodException e){
-            e.printStackTrace();
-            values.add(null);
-        }
 
             addRow(values);
     }
@@ -182,8 +176,7 @@ public class DataFrame implements Cloneable{
         }
     }
 
-    void addToColumn(String columnName, Value toAdd){
-        try{
+    void addToColumn(String columnName, Value toAdd) throws CustomException{
             ArrayList column = get(columnName);
             if(!ifColumnIsNumeric(column)){
                 throw new CustomException("Values are not numeric in this column");
@@ -192,14 +185,9 @@ public class DataFrame implements Cloneable{
             for(int iterator=0; iterator<columnSize; iterator++){
                 ((Value) column.get(iterator)).add(toAdd);
             }
-        }catch (CustomException e){
-            e.printStackTrace();
-        }
-
     }
 
-    void substractFromColumn(String columnName, Value toAdd){
-        try{
+    void substractFromColumn(String columnName, Value toAdd) throws CustomException{
             ArrayList column = get(columnName);
             if(!ifColumnIsNumeric(column)){
                 throw new CustomException("Values are not numeric in this column");
@@ -208,10 +196,6 @@ public class DataFrame implements Cloneable{
             for(int iterator=0; iterator<columnSize; iterator++){
                 ((Value) column.get(iterator)).sub(toAdd);
             }
-        }catch (CustomException e){
-            e.printStackTrace();
-        }
-
     }
 
     void multiplyColumn(String columnName, Value toAdd){
@@ -344,11 +328,10 @@ public class DataFrame implements Cloneable{
         return splitDataFrame;
     }
 
-    SplitData groupby(String[] colnames){
+    SplitData groupby(String[] colnames)throws CustomException{
         LinkedList<LinkedList<DataFrame>> tmp = new LinkedList <>();
+        LinkedList<DataFrame> splitDataFrame = new LinkedList<DataFrame>(groupbyOne(colnames[0]));
 
-        try {
-            LinkedList<DataFrame> splitDataFrame = new LinkedList<DataFrame>(groupbyOne(colnames[0]));
             for (int colnamesIterator = 1; colnamesIterator < colnames.length; colnamesIterator++) {
                 for (int holderIterator = 0; holderIterator < splitDataFrame.size(); holderIterator++) {
                     tmp.add(splitDataFrame.get(holderIterator).groupbyOne(colnames[colnamesIterator]));
@@ -357,14 +340,16 @@ public class DataFrame implements Cloneable{
                 tmp.clear();
             }
             return new SplitData(colnames,splitDataFrame);
-        }
-        catch(CustomException e){
-            e.printStackTrace();
-            return null;
-        }
     }
 
-    DataFrame createDataFrameForGivenValue(Value value, String colname){
+    SplitData groupby() throws CustomException{
+        LinkedList<DataFrame> list = new LinkedList<>();
+        list.add(this);
+        String[] names = new String[]{};
+        return new SplitData(names,list);
+    }
+
+    DataFrame createDataFrameForGivenValue(Value value, String colname) throws CustomException{
         DataFrame dataFrameOfValue = new DataFrame(names,types);
         int indexOfColumn = 0;
         while(!names[indexOfColumn].equals(colname)){
@@ -401,7 +386,7 @@ public class DataFrame implements Cloneable{
         String[] namesToGroupBy;
         ArrayList<String> namesOfOutput;
 
-        SplitData(String[] colnames, LinkedList<DataFrame> listOfSplitDataFrames){
+        SplitData(String[] colnames, LinkedList<DataFrame> listOfSplitDataFrames) throws CustomException{
             namesToGroupBy = colnames;
             this.listOfSplitDataFrames=listOfSplitDataFrames;
             row = new ArrayList<>();
@@ -436,7 +421,7 @@ public class DataFrame implements Cloneable{
             return output;
         }
 
-        public ArrayList<Value> meanOfColumn(DataFrame data) throws CloneNotSupportedException{
+        public ArrayList<Value> meanOfColumn(DataFrame data) throws CloneNotSupportedException, CustomException{
             Value sum;
             int rowIterator;
                 row.clear();
@@ -449,12 +434,7 @@ public class DataFrame implements Cloneable{
                                 sum.add((Value)column.get(rowIterator).clone());
                             }
                         }
-                        try {
                             row.add(sum.div(new IntHolder(rowIterator)));
-                        }
-                        catch(CustomException e){
-                            e.printStackTrace();
-                        }
                     }
                     else{
                         row.add(null);
@@ -464,10 +444,10 @@ public class DataFrame implements Cloneable{
         }
 
         @Override
-        public DataFrame mean() {
+        public DataFrame mean() throws CustomException, CloneNotSupportedException{
             ArrayList<Value> rowOfMeans;
             int index;
-            try {
+
                 for (DataFrame data : listOfSplitDataFrames) {
                     rowOfMeans = new ArrayList<>(meanOfColumn(data));
                     row.clear();
@@ -484,16 +464,30 @@ public class DataFrame implements Cloneable{
 
                     output.addRow(row);
                 }
-            }
-            catch (CloneNotSupportedException e){
-                e.printStackTrace();
+            return output;
+        }
+
+        @Override
+        public DataFrame median(){
+            for (DataFrame data: listOfSplitDataFrames){
+                row.clear();
+                for(ArrayList<? extends Value> column: data.dataFrame){
+                    Collections.sort(column);
+                    if(column.size()%2 == 1){
+                        row.add(column.get(column.size()/2).add(column.get(size()/2+1)));
+                    }
+                    else{
+                        row.add(column.get(column.size()/2));
+                    }
+                }
+                output.addRow(row);
             }
 
             return output;
         }
 
         @Override
-        public DataFrame std() {
+        public DataFrame std() throws CustomException, CloneNotSupportedException{
             ArrayList<Value> rowOfMeans;
             Value sum;
             Value distance;
@@ -501,7 +495,7 @@ public class DataFrame implements Cloneable{
             Value val;
             int index;
             int rowIterator;
-            try {
+
                 for (DataFrame data : listOfSplitDataFrames) {
                     rowOfMeans = new ArrayList<>(meanOfColumn(data));
                     row.clear();
@@ -526,12 +520,7 @@ public class DataFrame implements Cloneable{
                                 if (rowIterator <= 1) {
                                     rowIterator = 2;
                                 }
-                                try {
                                     row.add(sum.div(new IntHolder(rowIterator - 1)).pow(new DoubleHolder(0.5)));
-                                }
-                                catch(CustomException e){
-                                    e.printStackTrace();
-                                }
                             } else {
                                 row.add(null);
                             }
@@ -541,10 +530,6 @@ public class DataFrame implements Cloneable{
 
                     output.addRow(row);
                 }
-            }
-            catch(CloneNotSupportedException e){
-                e.printStackTrace();
-            }
             return output;
         }
 
@@ -576,7 +561,7 @@ public class DataFrame implements Cloneable{
         }
 
         @Override
-        public DataFrame var() {
+        public DataFrame var() throws CustomException, CloneNotSupportedException{
             ArrayList<Value> rowOfMeans;
             Value sum;
             Value distance;
@@ -584,7 +569,7 @@ public class DataFrame implements Cloneable{
             Value val;
             int index;
             int rowIterator;
-            try {
+
                 for (DataFrame data : listOfSplitDataFrames) {
                     rowOfMeans = new ArrayList<>(meanOfColumn(data));
                     row.clear();
@@ -609,12 +594,7 @@ public class DataFrame implements Cloneable{
                                 if (rowIterator <= 1) {
                                     rowIterator = 2;
                                 }
-                                try {
                                     row.add(sum.div(new IntHolder(rowIterator - 1)));
-                                }
-                                catch(CustomException e){
-                                    e.printStackTrace();
-                                }
                             } else {
                                 row.add(null);
                             }
@@ -624,29 +604,23 @@ public class DataFrame implements Cloneable{
 
                     output.addRow(row);
                 }
-            }
-            catch(CloneNotSupportedException e){
-                e.printStackTrace();
-            }
             return output;
         }
 
         @Override
         public DataFrame apply(Applyable a) {
-            DataFrame output = new DataFrame(names,types);
+            try {
+                DataFrame output = new DataFrame(names, types);
 
-            for(DataFrame df: listOfSplitDataFrames){
-                try {
+                for (DataFrame df : listOfSplitDataFrames) {
                     DataFrame oneOfSplitData = a.apply((DataFrame) df.clone());
-                    for(int rowIterator=0; rowIterator<df.names.length; rowIterator++){
+                    for (int rowIterator = 0; rowIterator < df.names.length; rowIterator++) {
                         output.addRow(oneOfSplitData.getRow(rowIterator));
                     }
                 }
-                catch(CloneNotSupportedException e){
+            }catch(CloneNotSupportedException|CustomException e){
                     e.printStackTrace();
                 }
-
-            }
             return output;
         }
     }
