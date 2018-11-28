@@ -373,7 +373,7 @@ public class DataFrame implements Cloneable{
         return flattenList;
     }
 
-    private boolean ifColumnIsNumeric(ArrayList column){
+    public boolean ifColumnIsNumeric(ArrayList column){
         return (column.get(0) instanceof IntHolder | column.get(0) instanceof DoubleHolder | column.get(0)
                 instanceof FloatHolder | column.get(0) instanceof DateTimeHolder);
     }

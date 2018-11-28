@@ -1,16 +1,11 @@
 package sample;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.util.Optional;
 
 public class FileWindowController {
     @FXML
@@ -51,14 +46,12 @@ public class FileWindowController {
             throw new CustomException("You need to choose a file");
         }
         fileInformation.isFirstLineWithNames = isFirstLineWithNames.isSelected();
-            if(columnsNames.getText() != null)
-            {
+            if(columnsNames.getText() != null){
                 fileInformation.columnsNames = columnsNames.getText().split(",");
                 for( String names : fileInformation.columnsNames)
                     names = names.trim();
             }
-            if(!columnsTypes.getText().trim().isEmpty())
-            {
+            if(!columnsTypes.getText().trim().isEmpty()){
                 String[] types = columnsTypes.getText().split(",");
 
                 for(int i=0; i<types.length ; i++) {

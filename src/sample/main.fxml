@@ -31,7 +31,9 @@
                 <MenuItem text="Data Frame" onAction="#data"/>
             </Menu>
             <Menu text="Charts">
-
+                <MenuItem text="Line Chart" onAction="#getLineChartWindow"/>
+                <MenuItem text="Scatter Chart" onAction="#getScatterChartWindow"/>
+                <MenuItem text="Bar Chart" onAction="#getBarChartWindow"/>
             </Menu>
         </MenuBar>
     </top>

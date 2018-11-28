@@ -1,19 +1,13 @@
 package sample;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Controller {
@@ -32,6 +26,10 @@ public class Controller {
 
     private DataFrame df;
     private Pane pane=new Pane();
+
+    public DataFrame getData(){
+        return df;
+    }
 
 
     public void showLoadDialog() {
@@ -56,6 +54,7 @@ public class Controller {
             try {
                 FileInformation fileInformation = fileWindowController.process();
                 df = new DataFrame(fileInformation.filePath, fileInformation.columnsTypes, fileInformation.isFirstLineWithNames);
+
                 printDataFrame(df);
 
             } catch (Exception e) {
@@ -177,6 +176,79 @@ public class Controller {
         alertsArea.setText(toAdd);
     }
 
+    public void getLineChartWindow(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("lineChartWindow.fxml"));
 
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            String error = e.getMessage();
+            addAlert(error);
+        }
+
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        LineChartWindowController controller = fxmlLoader.getController();
+        controller.df = new DataFrame(this.df);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK){
+
+        }
+    }
+
+    public void getScatterChartWindow(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("scatterChartWindow.fxml"));
+
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            String error = e.getMessage();
+            addAlert(error);
+        }
+
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        ScatterChartController controller = fxmlLoader.getController();
+        controller.df = new DataFrame(this.df);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK){
+
+        }
+    }
+
+    public void getBarChartWindow(){
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainBorderPane.getScene().getWindow());
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("barChartWindow.fxml"));
+
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+        } catch (IOException e) {
+            String error = e.getMessage();
+            addAlert(error);
+        }
+
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        BarChartWindowController controller = fxmlLoader.getController();
+        controller.df = new DataFrame(this.df);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK){
+
+        }
+    }
 
 }
