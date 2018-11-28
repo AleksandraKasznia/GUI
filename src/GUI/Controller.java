@@ -1,5 +1,6 @@
-package sample;
+package GUI;
 
+import dataFrame.DataFrame;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 
@@ -74,7 +75,7 @@ public class Controller {
     public void printDataFrame(DataFrame toPrint){
         for(int columnIterator=0; columnIterator<toPrint.numberOfColumns; columnIterator++){
             TextField value;
-            value = new TextField(toPrint.names[columnIterator]);
+            value = new TextField(toPrint.getName(columnIterator));
             value.setMaxWidth(98);
             value.setLayoutX(98 * columnIterator);
             value.setLayoutY(1);

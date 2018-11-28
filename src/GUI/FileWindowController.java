@@ -1,10 +1,12 @@
-package sample;
+package GUI;
 
 import javafx.scene.control.*;
 
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import myException.CustomException;
+import value.*;
 
 
 public class FileWindowController {
@@ -39,7 +41,7 @@ public class FileWindowController {
         chosenFile.setText(filePath);
     }
 
-    public FileInformation process() throws CustomException{
+    public FileInformation process() throws CustomException {
         FileInformation fileInformation = new FileInformation();
         fileInformation.filePath = chosenFile.getText();
         if(fileInformation.filePath==null || fileInformation.filePath.equals("")){

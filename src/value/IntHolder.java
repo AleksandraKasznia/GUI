@@ -1,4 +1,6 @@
-package sample;
+package value;
+
+import myException.CustomException;
 
 import java.util.Objects;
 
@@ -67,7 +69,7 @@ public class IntHolder extends Value {
     }
 
     @Override
-    public Value div(Value value) throws CustomException{
+    public Value div(Value value) throws CustomException {
         if (value instanceof IntHolder){
             if(((IntHolder) value).getValue() == 0) throw new CustomException("You can't divide by 0");
             this.intValue /= ((IntHolder) value).getValue();

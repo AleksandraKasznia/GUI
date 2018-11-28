@@ -1,4 +1,8 @@
-package sample;
+package dataFrame;
+
+import value.CooValue;
+import myException.CustomException;
+import value.Value;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -9,7 +13,7 @@ public class SparseDataFrame extends DataFrame {
     int sizeOfColumn;
     String toHide;
 
-    public SparseDataFrame(String[] namesOfColumns, ArrayList<Class<? extends Value>> typesOfColumns, String hide ) throws CustomException{
+    public SparseDataFrame(String[] namesOfColumns, ArrayList<Class<? extends Value>> typesOfColumns, String hide ) throws CustomException {
         super(namesOfColumns, typesOfColumns);
         numberOfColumns = namesOfColumns.length;
         names = namesOfColumns;

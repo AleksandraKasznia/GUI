@@ -1,4 +1,6 @@
-package sample;
+package value;
+
+import myException.CustomException;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -85,7 +87,7 @@ public class DateTimeHolder extends Value{
     }
 
     @Override
-    public DateTimeHolder create(String s) throws CustomException{
+    public DateTimeHolder create(String s) throws CustomException {
         if(s.matches("\\d{4}-\\d{2}-\\d{2}")){
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             try{

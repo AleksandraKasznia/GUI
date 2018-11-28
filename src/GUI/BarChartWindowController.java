@@ -1,17 +1,17 @@
-package sample;
+package GUI;
 
+import dataFrame.DataFrame;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
+import value.Value;
 
 import java.util.ArrayList;
 
-public class LineChartWindowController {
-
+public class BarChartWindowController {
     @FXML
-    private LineChart <String, Number> lineChart;
+    private BarChart<String, Number> barChart;
 
     @FXML
     private TextField xValues;
@@ -23,7 +23,7 @@ public class LineChartWindowController {
 
     public void draw(){
 
-        lineChart.getData().clear();
+        barChart.getData().clear();
         XYChart.Series<String, Number> series = new XYChart.Series<>();
 
         String x = xValues.getText().trim();
@@ -38,7 +38,7 @@ public class LineChartWindowController {
                 for (int i = 0; i < columnx.size(); i++){
                     series.getData().add(new XYChart.Data<>(columnx.get(i).toString(),(Number)((Value)columny.get(i)).getValue()));
                 }
-                lineChart.getData().add(series);
+                barChart.getData().add(series);
             }catch(Exception e){
 
             }

@@ -1,4 +1,4 @@
-package sample;
+package value;
 
 import java.util.Objects;
 

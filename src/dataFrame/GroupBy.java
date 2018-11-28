@@ -1,4 +1,4 @@
-package sample;
+package dataFrame;
 
 public interface GroupBy {
     DataFrame max();

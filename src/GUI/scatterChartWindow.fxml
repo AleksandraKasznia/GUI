@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <?import javafx.scene.chart.ScatterChart?>
-<BorderPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.ScatterChartController">
+<BorderPane prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.ScatterChartController">
     <top>
         <GridPane BorderPane.alignment="CENTER">
             <columnConstraints>

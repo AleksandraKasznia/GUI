@@ -1,15 +1,17 @@
-package sample;
+package value;
+
+import myException.CustomException;
 
 public class CooValue extends Value{
     public int index;
     public Value content;
 
-    CooValue(int inputIndex, Value inputContent){
+    public CooValue(int inputIndex, Value inputContent){
         index = inputIndex;
         content = inputContent;
     }
 
-    CooValue(){}
+    public CooValue(){}
 
     @Override
     public String toString() {
@@ -40,7 +42,7 @@ public class CooValue extends Value{
     }
 
     @Override
-    public Value div(Value value) throws CustomException{
+    public Value div(Value value) throws CustomException {
         content = content.div(value);
         return this;
     }

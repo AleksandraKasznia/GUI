@@ -1,4 +1,6 @@
-package sample;
+package GUI;
+import value.Value;
+
 import java.util.ArrayList;
 
 public class FileInformation {

@@ -1,4 +1,7 @@
-package sample;
+package dataFrame;
+
+import myException.CustomException;
+import value.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,10 +15,10 @@ public class DataFrame implements Cloneable{
     ArrayList<ArrayList> dataFrame;
     String[] names;
     ArrayList<Class<? extends Value>> types;
-    int numberOfColumns;
+    public int numberOfColumns;
 
 
-    public DataFrame(String[] names, ArrayList<Class<? extends Value>> types)throws CustomException{
+    public DataFrame(String[] names, ArrayList<Class<? extends Value>> types)throws CustomException {
         dataFrame = new ArrayList<>();
         this.names = names;
         this.types = types;
@@ -23,14 +26,14 @@ public class DataFrame implements Cloneable{
         initiate(types);
     }
 
-    DataFrame(DataFrame df){
+    public DataFrame(DataFrame df){
         names = df.names;
         types = df.types;
         dataFrame = df.dataFrame;
         numberOfColumns = names.length;
     }
 
-    DataFrame(String fileName, ArrayList<Class<? extends Value>> types, boolean isHeader) throws IOException,
+    public DataFrame(String fileName, ArrayList<Class<? extends Value>> types, boolean isHeader) throws IOException,
             NumberFormatException, CustomException, IllegalAccessException,
             InvocationTargetException, NoSuchMethodException, InstantiationException{
         BufferedReader br = Files.newBufferedReader(Paths.get(fileName));
@@ -57,11 +60,11 @@ public class DataFrame implements Cloneable{
             }
     }
 
-    int size(){
+    public int size(){
         return dataFrame.get(0).size();
     }
 
-    ArrayList get(String colname) throws CustomException{
+    public ArrayList get(String colname) throws CustomException{
         int i;
         for (i=0; i<names.length; i++){
             if (names[i].equals(colname)){
@@ -71,7 +74,7 @@ public class DataFrame implements Cloneable{
         throw new CustomException("There is no such column");
     }
 
-    Value getRecord(int column, int row){
+    public Value getRecord(int column, int row){
         return (Value)dataFrame.get(column).get(row);
     }
 
@@ -96,6 +99,10 @@ public class DataFrame implements Cloneable{
             row.add(dataFrame.get(columnIterator).get(indexOfRow));
         }
         return row;
+    }
+
+    public String getName(int index){
+        return names[index];
     }
 
     DataFrame iloc(int i) throws CustomException{
@@ -328,7 +335,7 @@ public class DataFrame implements Cloneable{
         return splitDataFrame;
     }
 
-    SplitData groupby(String[] colnames)throws CustomException{
+    public SplitData groupby(String[] colnames)throws CustomException{
         LinkedList<LinkedList<DataFrame>> tmp = new LinkedList <>();
         LinkedList<DataFrame> splitDataFrame = new LinkedList<DataFrame>(groupbyOne(colnames[0]));
 
@@ -342,7 +349,7 @@ public class DataFrame implements Cloneable{
             return new SplitData(colnames,splitDataFrame);
     }
 
-    SplitData groupby() throws CustomException{
+    public SplitData groupby() throws CustomException{
         LinkedList<DataFrame> list = new LinkedList<>();
         list.add(this);
         String[] names = new String[]{};

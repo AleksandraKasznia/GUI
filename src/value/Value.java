@@ -1,4 +1,6 @@
-package sample;
+package value;
+
+import myException.CustomException;
 
 import java.lang.reflect.InvocationTargetException;
 

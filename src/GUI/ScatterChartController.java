@@ -1,10 +1,11 @@
-package sample;
+package GUI;
 
+import dataFrame.DataFrame;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.TextField;
+import value.Value;
 
 import java.util.ArrayList;
 
